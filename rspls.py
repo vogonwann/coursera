@@ -19,7 +19,7 @@ def number_to_name(number):
         print('Number is not in correct range!')
 
 
-def name_to_number(name):
+def name_to_numbers(name):
     """
     Converts name to number
     """
@@ -49,12 +49,12 @@ def rpsls(name):
 
         result = (player_number - comp_number) % 5
 
-        if (result == 1) or (result == 2):
-            print('Player wins!\n')
-        if (result == 3) or (result == 4):
-            print('Computer wins!\n')
-        elif result == 0:
+        if result == 0:
             print('Player and computer tie!\n')
+        elif result < 3:
+            print('Player wins!\n')
+        else:
+            print('Computer wins!\n')
     else:
         print("Wrong choice! Player: " + name + "\n")
 
