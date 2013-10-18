@@ -1,5 +1,6 @@
 import random
 
+
 def number_to_name(number):
     """
     Converts number to name
