@@ -19,7 +19,7 @@ def number_to_name(number):
         print('Number is not in correct range!')
 
 
-def name_to_numbers(name):
+def name_to_number(name):
     """
     Converts name to number
     """
