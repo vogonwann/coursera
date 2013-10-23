@@ -1,4 +1,4 @@
-# http://www.codeskulptor.org/#user21_SZaRsbLoc5D00rY_0.py
+# http://www.codeskulptor.org/#user21_qOtfcAaHmsl1RyH.py
 
 # template for "Guess the number" mini-project
 # input will come from buttons and an input field
@@ -65,10 +65,8 @@ def input_guess(guess):
     print "Guesses left: " + str(left_guesses)
 
     try:
-        if 0 > guess > max_range:
-            print "Guess is out of range!"
-        else:
-            if left_guesses > 0:
+        if left_guesses > 0:
+            if is_in_range(int(guess),0,max_range):
                 if int(guess) < secret_number:
                     print "Higher!"
                 elif int(guess) > secret_number:
@@ -77,12 +75,23 @@ def input_guess(guess):
                     print "Correct!\n"
                     new_game()
             else:
-                print "You loose! Correct number was: " + str(secret_number) + "\n"
-                new_game()
+                print "Guess is out of range!"
+        else:
+            print "You loose! Correct number was: " + str(secret_number) + "\n"
+            new_game()
     except Exception, e:
         print "Error: " + e.message
 
     print ""
+
+def is_in_range(num,min,max):
+    """
+    Returns True if num is in (min,max] range
+    otherwise, returns False
+    """
+    if min <= num < max: return True
+    else: return False
+
 
 # create frame
 frame = simplegui.create_frame("Guess the number", 200, 150)
@@ -95,5 +104,5 @@ frame.add_input("Guess", input_guess, 200)
 
 
 # call new_game and start frame
-frame.start()
 new_game()
+frame.start()
