@@ -1,4 +1,5 @@
 # Mini-project #6 - Blackjack
+# http://www.codeskulptor.org/#user25_TaclO1CHfr_0.py
 
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import random
