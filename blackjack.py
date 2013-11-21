@@ -13,6 +13,8 @@ CARD_BACK_SIZE = (71, 96)
 CARD_BACK_CENTER = (35.5, 48)
 card_back = simplegui.load_image("http://commondatastorage.googleapis.com/codeskulptor-assets/card_back.png")
 
+background_image = simplegui.load_image("http://i.imgur.com/DJgogOp.jpg?1")
+
 # initialize some useful global variables
 in_play = False
 outcome = ""
@@ -199,6 +201,7 @@ def stand():
 # draw handler
 def draw(canvas):
     # test to make sure that card.draw works, replace with your code below
+    canvas.draw_image(background_image, [600,600], [1200,1200], [300,300], [600,600])
     dealers_hand.draw(canvas, [100, 200])
     players_hand.draw(canvas, [100, 300])
     canvas.draw_text(outcome, [300, 150], 32, "Blue", "sans-serif")
