@@ -1,19 +1,23 @@
 # Mini-project #6 - Blackjack ----
-# http://www.codeskulptor.org/#user25_TaclO1CHfr_0.py
+# http://www.codeskulptor.org/#user26_pq1IrU26LU_0.py
 
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import random
 
-# load card sprite - 949x392 - source: jfitz.com
+# load card sprite
 CARD_SIZE = (73, 98)
-CARD_CENTER = (36.5, 49)
-card_images = simplegui.load_image("http://commondatastorage.googleapis.com/codeskulptor-assets/cards.jfitz.png")
+CARD_SIZE_ = (125, 177)
+CARD_CENTER = (62.5, 88.5)
+card_images = simplegui.load_image("http://i.imgur.com/Mn3ONv1.jpg")
 
-CARD_BACK_SIZE = (71, 96)
-CARD_BACK_CENTER = (35.5, 48)
-card_back = simplegui.load_image("http://commondatastorage.googleapis.com/codeskulptor-assets/card_back.png")
+# load card back
+CARD_BACK_SIZE = (73, 98)
+CARD_BACK_SIZE_ = (125, 177)
+CARD_BACK_CENTER = (62.5, 88.5)
+card_back = simplegui.load_image("http://i.imgur.com/8ionrg6.jpg")
 
-background_image = simplegui.load_image("http://i.imgur.com/DJgogOp.jpg?1")
+# load bground image
+background_image = simplegui.load_image("http://i.imgur.com/N9ka4dG.jpg")
 
 # initialize some useful global variables
 in_play = False
@@ -30,6 +34,7 @@ DEAL_MESSAGE = "Deal again?"
 MSG_ALREADY_IN_GAME = "You're already in game."
 MSG_DEALER_WINS = "Dealer wins!"
 MSG_PLAYER_WINS = "You win!"
+MSG_PLAYER_LOOSES = "You lose!"
 MSG_BLACKJACK = "Blackjack"
 
 # define card class
@@ -53,9 +58,9 @@ class Card:
         return self.rank
 
     def draw(self, canvas, pos):
-        card_loc = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(self.rank),
-                    CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(self.suit))
-        canvas.draw_image(card_images, card_loc, CARD_SIZE, [pos[0] + CARD_CENTER[0], pos[1] + CARD_CENTER[1]], CARD_SIZE)
+        card_loc = (CARD_CENTER[0] + CARD_SIZE_[0] * RANKS.index(self.rank),
+                    CARD_CENTER[1] + CARD_SIZE_[1] * SUITS.index(self.suit))
+        canvas.draw_image(card_images, card_loc, CARD_SIZE_, [pos[0] + CARD_CENTER[0], pos[1] + CARD_CENTER[1]], CARD_SIZE)
 
 # define hand class
 class Hand:
@@ -131,84 +136,60 @@ def deal():
         dealers_hand.add_card(deck.deal_card())
         players_hand.add_card(deck.deal_card())
 
-        print("DEALER'S HAND: " + str(dealers_hand))
-        print("PLAYER'S HAND: " + str(players_hand))
-
-        print("D_TOTAL: " +  str(dealers_hand.get_value()))
-        print("P_TOTAL: " + str(players_hand.get_value()))
         in_play = True
-    else: print(MSG_ALREADY_IN_GAME)
-
+    else:
+        outcome = MSG_PLAYER_LOOSES
+        score -= 1
+        in_play = False
 def hit():
     global players_hand, deck, in_play, score, outcome
     if in_play:
         if players_hand.get_value() <= 21:
             card = deck.deal_card()
-            print(card)
             players_hand.add_card(card)
 
             if players_hand.get_value() > 21:
-                print("P_TOTAL: " + str(players_hand.get_value()))
-                print("You Have Busted!")
-                print("\nDEALER WINS")
                 outcome = "You have busted!"
                 in_play = False
                 score -= 1
-                print ("SCORE: " + str(score))
             else:
-                print("P_TOTAL: " + str(players_hand.get_value()))
                 in_play = True
-    else: print(DEAL_MESSAGE)
-    # replace with your code below
-
-    # if the hand is in play, hit the player
-
-    # if busted, assign a message to outcome, update in_play and score
+    else: outcome = DEAL_MESSAGE
 
 def stand():
     global dealers_hand, players_hand, deck, in_play, score, outcome
     if not in_play:
-        print(DEAL_MESSAGE)
+        outcome = DEAL_MESSAGE
     else:
         while dealers_hand.get_value() < 17:
             card = deck.deal_card()
-            print(card)
             dealers_hand.add_card(card)
-            print("D_TOTAL: " + str(dealers_hand.get_value()))
         if dealers_hand.get_value() > 21:
-            print("Dealer has busted!")
-            print("\nPLAYER WINS")
             outcome = "Dealer has busted!"
             score += 1
         else:
             if dealers_hand.get_value() >= players_hand.get_value():
-                print("\nDEALER WINS")
                 outcome = MSG_DEALER_WINS
                 score -= 1
             else:
-                print("\nPLAYER WINS")
                 outcome = MSG_PLAYER_WINS
                 score += 1
-
-        print ("SCORE: " + str(score) + "\n")
         in_play = False
-    # replace with your code below
-
-    # if hand is in play, repeatedly hit dealer until his hand has value 17 or more
-
-    # assign a message to outcome, update in_play and score
 
 # draw handler
 def draw(canvas):
     # test to make sure that card.draw works, replace with your code below
     canvas.draw_image(background_image, [600,600], [1200,1200], [300,300], [600,600])
-    dealers_hand.draw(canvas, [100, 200])
-    players_hand.draw(canvas, [100, 300])
-    canvas.draw_text(outcome, [300, 150], 32, "Blue", "sans-serif")
-    canvas.draw_text(MSG_BLACKJACK, [10, 60], 72, "Black", "sans-serif")
-    canvas.draw_text(str(score), [500, 60], 72, "White", "sans-serif")
+    canvas.draw_text("Dealer:", [80, 230], 20, "White", "sans-serif")
+    dealers_hand.draw(canvas, [50, 200])
+    canvas.draw_text("Player:", [80, 380], 20, "White", "sans-serif")
+    players_hand.draw(canvas, [50, 350])
+    canvas.draw_text(outcome, [400, 230], 20, "White", "sans-serif")
+    #canvas.draw_text(MSG_BLACKJACK, [10, 60], 72, "Black", "sans-serif")
+    canvas.draw_text("Score:", [400, 520], 32, "White", "sans-serif")
+    canvas.draw_text(str(score), [500, 520], 32, "White", "sans-serif")
     if in_play:
-        canvas.draw_image(card_back, CARD_BACK_CENTER, CARD_BACK_SIZE, [105 + CARD_BACK_CENTER[0], 200 + CARD_BACK_CENTER[1]], CARD_BACK_SIZE)
+        canvas.draw_image(card_back, CARD_BACK_CENTER, CARD_BACK_SIZE_, [55 + CARD_BACK_CENTER[0], 200 + CARD_BACK_CENTER[1]], CARD_BACK_SIZE)
 
 # initialization frame
 frame = simplegui.create_frame("Blackjack", 600, 600)
